@@ -40,4 +40,9 @@ public class UserMgtController {
         UserMgt updateduser = userService.updateUserById(id, user);
         return new ApiResponse<>(true, "User updated successfully", updateduser);
     }
+
+    @GetMapping("/userByRole/{roleId}")
+    public ApiResponse<List<UserMgt>> getUsersByRole(@PathVariable("roleId") long roleId){
+        return new ApiResponse<>(true, "Users found", userService.getUsersByRole(roleId));
+    }
 }

@@ -50,4 +50,9 @@ public class UserServiceImpl implements UserService {
     public UserMgt updateUserById(long id, UserMgt user) {
         return null;
     }
+
+    @Override
+    public List<UserMgt> getUsersByRole(long roleId) {
+        return userRepository.findByRoleId(roleId);
+    }
 }

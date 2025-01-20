@@ -13,4 +13,6 @@ public interface  UserService {
     List<UserMgt> findAll();
 
     UserMgt updateUserById(long id, UserMgt user);
+
+    List<UserMgt> getUsersByRole(long roleId);
 }

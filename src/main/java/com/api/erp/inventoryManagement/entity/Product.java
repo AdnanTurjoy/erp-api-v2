@@ -11,16 +11,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Stock {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    private String name;
+    private String sku;
+    private String description;
+    private double price;
 
-    private int quantity;
-    private String location;
-    private LocalDateTime lastUpdated;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
