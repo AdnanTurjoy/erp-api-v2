@@ -1,0 +1,38 @@
+package com.api.erp.hrManagement.controllers;
+
+import com.api.erp.hrManagement.entity.Department;
+import com.api.erp.hrManagement.entity.Leave;
+import com.api.erp.hrManagement.services.DepartmentService;
+import com.api.erp.hrManagement.services.LeaveService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/leaves")
+public class LeaveController {
+
+    @Autowired
+    private LeaveService leaveService;
+
+    @PostMapping
+    public Leave applyLeave(@RequestBody Leave leave) {
+        return leaveService.applyLeave(leave);
+    }
+
+    @PutMapping("/{id}/status")
+    public Leave updateLeaveStatus(@PathVariable Long id, @RequestParam String status) {
+        return leaveService.updateLeaveStatus(id, status);
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public List<Leave> getLeavesByEmployee(@PathVariable Long employeeId) {
+        return leaveService.getLeavesByEmployee(employeeId);
+    }
+
+    @GetMapping
+    public List<Leave> getAllLeaves() {
+        return leaveService.getAllLeaves();
+    }
+}
