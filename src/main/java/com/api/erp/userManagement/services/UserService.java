@@ -15,4 +15,6 @@ public interface  UserService {
     UserMgt updateUserById(long id, UserMgt user);
 
     List<UserMgt> getUsersByRole(long roleId);
+
+    UserMgt findByUsername(String username);
 }
