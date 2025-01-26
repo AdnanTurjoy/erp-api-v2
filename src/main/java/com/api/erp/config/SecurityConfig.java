@@ -27,15 +27,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF if not required (e.g., for APIs)
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity in stateless APIs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll() // Public endpoints
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll() // Public endpoints for login/register
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll() // Allow Swagger UI access
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll() // Allow API docs access
                         .anyRequest().authenticated() // All other endpoints require authentication
                 )
                 .authenticationProvider(authenticationProvider()); // Register the authentication provider
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

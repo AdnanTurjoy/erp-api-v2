@@ -1,10 +1,17 @@
 package com.api.erp.userManagement.controllers;
 
+import com.api.erp.userManagement.dtos.UserDTO;
 import com.api.erp.userManagement.entity.UserMgt;
 import com.api.erp.userManagement.services.UserService;
 import com.api.erp.utils.ApiResponse;
+import com.api.erp.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +21,29 @@ public class UserMgtController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostMapping("/userMgt")
+
+    @PostMapping("/auth/user-register")
     public ApiResponse<UserMgt> addUsers(@RequestBody UserMgt user){
 //        System.out.println(user.getUsername());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserMgt newUser = userService.addUser(user);
         return new ApiResponse<>(true, "User created successfully", newUser);
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
+        );
+        UserMgt user = userService.findByUsername(userDTO.getUsername());
+        String token = jwtUtil.generateToken(user.getUsername());
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping("/user/{id}")

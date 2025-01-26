@@ -2,22 +2,28 @@ package com.api.erp.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "yourSecretKey";
+    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String username) {
+    public static String generateToken(String username) {
+        long expirationTime = 1000 * 60 * 60; // 1 hour
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + expirationTime);
+
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(SECRET_KEY) // Use the secure key generated above
                 .compact();
     }
 
