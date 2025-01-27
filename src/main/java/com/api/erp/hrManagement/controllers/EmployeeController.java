@@ -3,6 +3,7 @@ package com.api.erp.hrManagement.controllers;
 import com.api.erp.hrManagement.entity.Employee;
 import com.api.erp.hrManagement.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/paginated")      // http://localhost:9090/api/employees/paginated?page=0&size=10
+    public Page<Employee> getEmployeesWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesWithPagination(page, size);
     }
 }
 
