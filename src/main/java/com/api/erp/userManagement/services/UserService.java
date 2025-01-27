@@ -1,20 +1,25 @@
 package com.api.erp.userManagement.services;
-import com.api.erp.userManagement.entity.UserMgt;
-import org.springframework.data.crossstore.ChangeSetPersister;
 
+import com.api.erp.userManagement.entity.User;
+import com.api.erp.userManagement.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
+public class UserService {
+    private final UserRepository userRepository;
 
-public interface  UserService {
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    UserMgt addUser(UserMgt user);
-    UserMgt getUserById(long id) throws ChangeSetPersister.NotFoundException;
+    public List<User> allUsers() {
+        List<User> users = new ArrayList<>();
 
-    List<UserMgt> findAll();
+        userRepository.findAll().forEach(users::add);
 
-    UserMgt updateUserById(long id, UserMgt user);
-
-    List<UserMgt> getUsersByRole(long roleId);
-
-    UserMgt findByUsername(String username);
+        return users;
+    }
 }
