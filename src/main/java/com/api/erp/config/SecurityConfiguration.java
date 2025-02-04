@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) // Use the new lambda-based Customizer API for disabling CSRF
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
