@@ -1,5 +1,8 @@
 package com.api.erp.hrManagement.entity;
 
+import com.api.erp.administration.entity.BusinessUnit;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "employees")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")  // Prevents recursion
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +28,10 @@ public class Employee {
     private String email;
     private String phone;
     private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "business_unit_id") // Foreign key column in employees table
+    private BusinessUnit businessUnit;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
