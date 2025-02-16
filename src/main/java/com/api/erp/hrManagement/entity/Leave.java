@@ -1,4 +1,6 @@
 package com.api.erp.hrManagement.entity;
+import com.api.erp.hrManagement.enums.LeaveStatus;
+import com.api.erp.hrManagement.enums.LeaveType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,10 +23,12 @@ public class Leave {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    private String leaveType; // Sick Leave, Casual Leave, Paid Leave
+    @Enumerated(EnumType.STRING)
+    private LeaveType leaveType;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status; // Pending, Approved, Rejected
+    @Enumerated(EnumType.STRING)
+    private LeaveStatus status;
     private LocalDateTime appliedAt;
 
 }

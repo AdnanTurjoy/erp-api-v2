@@ -1,5 +1,6 @@
 package com.api.erp.hrManagement.controllers;
 
+import com.api.erp.hrManagement.dtos.ApplyLeaveDTO;
 import com.api.erp.hrManagement.entity.Department;
 import com.api.erp.hrManagement.entity.Leave;
 import com.api.erp.hrManagement.services.DepartmentService;
@@ -17,7 +18,7 @@ public class LeaveController {
     private LeaveService leaveService;
 
     @PostMapping
-    public Leave applyLeave(@RequestBody Leave leave) {
+    public Leave applyLeave(@RequestBody ApplyLeaveDTO leave) {
         return leaveService.applyLeave(leave);
     }
 
