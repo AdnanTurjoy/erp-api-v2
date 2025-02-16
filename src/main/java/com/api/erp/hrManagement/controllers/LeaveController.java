@@ -1,10 +1,12 @@
 package com.api.erp.hrManagement.controllers;
 
+import com.api.erp.common.EmailService;
 import com.api.erp.hrManagement.dtos.ApplyLeaveDTO;
 import com.api.erp.hrManagement.entity.Department;
 import com.api.erp.hrManagement.entity.Leave;
 import com.api.erp.hrManagement.services.DepartmentService;
 import com.api.erp.hrManagement.services.LeaveService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ import java.util.List;
 public class LeaveController {
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private LeaveService leaveService;
 
     @PostMapping
@@ -23,7 +28,7 @@ public class LeaveController {
     }
 
     @PutMapping("/{id}/status")
-    public Leave updateLeaveStatus(@PathVariable Long id, @RequestParam String status) {
+    public Leave updateLeaveStatus(@PathVariable Long id, @RequestParam String status) throws MessagingException {
         return leaveService.updateLeaveStatus(id, status);
     }
 
@@ -36,4 +41,5 @@ public class LeaveController {
     public List<Leave> getAllLeaves() {
         return leaveService.getAllLeaves();
     }
+
 }
