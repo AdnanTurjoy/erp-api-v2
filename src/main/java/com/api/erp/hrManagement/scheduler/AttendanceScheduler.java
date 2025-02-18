@@ -15,9 +15,9 @@ public class AttendanceScheduler {
     @Autowired
     private AttendanceService attendanceService;
 
-//    @Scheduled(cron = "0 0 * * * ?")  // Run at the top of every hour
+    @Scheduled(cron = "0 0 * * * ?")  // Run at the top of every hour
 //    @Scheduled(cron = "0 30 12 * * ?")  // Cron expression for 12:30 PM daily
-    @Scheduled(cron = "0 * * * * ?")  // This will run every minute for TEST
+//    @Scheduled(cron = "0 * * * * ?")  // This will run every minute for TEST
     public void sendLateOrAbsentEmails() throws MessagingException {
         System.out.println("Starting the scheduler to send emails for Late/Absent employees...");
         // Fetch today's attendance and filter out "Late" or "Absent"

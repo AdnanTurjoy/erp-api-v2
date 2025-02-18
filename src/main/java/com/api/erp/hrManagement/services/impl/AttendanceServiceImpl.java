@@ -122,4 +122,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
     }
 
+    @Override
+    public List<Object> getBestPerformer(String filter) {
+        return employeeRepository.findBestPerformer(filter);
+    }
+
 }

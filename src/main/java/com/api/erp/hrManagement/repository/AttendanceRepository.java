@@ -29,5 +29,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     // Find employees who are "Late" or "Absent" and have not been notified
     List<Attendance> findByDateAndStatusInAndEmailSentFalse(LocalDate date, List<String> statuses);
 
+
 }
 

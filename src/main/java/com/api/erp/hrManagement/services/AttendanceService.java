@@ -17,4 +17,6 @@ public interface AttendanceService {
     List<Employee> findEmployeesLateOnDate(LocalDate date);
 
     void notifyLateOrAbsentEmployees() throws MessagingException;
+
+    List<Object> getBestPerformer(String filter);
 }
