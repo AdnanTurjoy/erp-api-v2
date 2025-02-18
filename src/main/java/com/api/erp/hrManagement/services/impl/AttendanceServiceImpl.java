@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,14 +32,39 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    public String getStatusFollowedByCheckInTime (LocalDateTime checkInDateTime) {
+        // Define the time thresholds for attendance status
+        LocalTime presentStartTime = LocalTime.of(9, 0);
+        LocalTime lateStartTime = LocalTime.of(9, 15);
+        LocalTime absentStartTime = LocalTime.of(12, 0);
+
+        // Extract the time from check-in
+        if (checkInDateTime == null) {
+            throw new IllegalArgumentException("Check-in time is required");
+        }
+        LocalTime checkInTime = checkInDateTime.toLocalTime();
+
+        // Determine the status based on the check-in time
+        String status;
+        if (checkInTime.isBefore(lateStartTime)) {
+            status = "Present";
+        } else if (checkInTime.isBefore(absentStartTime)) {
+            status = "Late";
+        } else {
+            status = "Absent";
+        }
+        return status;
+    }
+
     @Override
     public Attendance markAttendance(AttendanceDTO attendanceDTO) {
         // Ensure the employee exists
         Employee existing = employeeRepository.findById(attendanceDTO.getEmployeeId()).orElseThrow(() -> new RuntimeException("Employee not found"));
+
         Attendance attendance = new Attendance();
         attendance.setEmployee(existing);
         attendance.setDate(attendanceDTO.getDate());
-        attendance.setStatus(attendanceDTO.getStatus());
+        attendance.setStatus(getStatusFollowedByCheckInTime(attendanceDTO.getCheckIn()));
         attendance.setCheckIn(attendanceDTO.getCheckIn());
        return attendanceRepository.save(attendance);
 
@@ -65,4 +92,5 @@ public class AttendanceServiceImpl implements AttendanceService {
         logger.info("INFO log message", date);
         return attendanceRepository.findEmployeesLateOnDate(date);
     }
+
 }
