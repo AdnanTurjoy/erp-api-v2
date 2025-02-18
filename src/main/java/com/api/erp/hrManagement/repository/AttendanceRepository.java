@@ -22,5 +22,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     // Custom query to find employees who were late on a specific date
     @Query("SELECT DISTINCT a.employee FROM Attendance a WHERE a.date = :date AND a.status = 'Late'")
     List<Employee> findEmployeesLateOnDate(@Param("date") LocalDate date);
+
+    List<Attendance> findByDate(LocalDate today);
+
+
+    // Find employees who are "Late" or "Absent" and have not been notified
+    List<Attendance> findByDateAndStatusInAndEmailSentFalse(LocalDate date, List<String> statuses);
+
 }
 

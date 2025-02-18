@@ -26,6 +26,7 @@ public class Attendance {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private String status; // Present, Absent, Late
+    private boolean emailSent = false;
 
 }
 
