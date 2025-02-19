@@ -7,7 +7,7 @@ import jakarta.mail.MessagingException;
 import java.util.List;
 
 public interface LeaveService {
-    Leave applyLeave(ApplyLeaveDTO leave);
+    Leave applyLeave(ApplyLeaveDTO leave) throws MessagingException;
     Leave updateLeaveStatus(Long leaveId, String status) throws MessagingException;
     List<Leave> getLeavesByEmployee(Long employeeId);
     List<Leave> getAllLeaves();

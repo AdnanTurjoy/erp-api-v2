@@ -33,7 +33,7 @@ public class LeaveServiceImpl implements LeaveService {
     private EmailService emailService;
 
     @Override
-    public Leave applyLeave(ApplyLeaveDTO leave) {
+    public Leave applyLeave(ApplyLeaveDTO leave) throws MessagingException {
         Employee employee = employeeService.getEmployeeById(leave.getEmployeeId());
         if(employee == null) {
             throw new RuntimeException("Employee Not Found");
@@ -47,6 +47,67 @@ public class LeaveServiceImpl implements LeaveService {
         newLeave.setEndDate(leave.getEndDate());
         newLeave.setStatus(LeaveStatus.PENDING);
         newLeave.setAppliedAt(leave.getAppliedAt());
+        String htmlBody = "<html>\n" +
+                "<head>\n" +
+                "    <style>\n" +
+                "        body {\n" +
+                "            font-family: Arial, sans-serif;\n" +
+                "            background-color: #f4f4f9;\n" +
+                "            padding: 20px;\n" +
+                "        }\n" +
+                "        .container {\n" +
+                "            background-color: #ffffff;\n" +
+                "            border: 1px solid #dddddd;\n" +
+                "            border-radius: 8px;\n" +
+                "            padding: 20px;\n" +
+                "            max-width: 600px;\n" +
+                "            margin: 0 auto;\n" +
+                "        }\n" +
+                "        h1 {\n" +
+                "            font-size: 18px;\n" +
+                "            color: #333333;\n" +
+                "        }\n" +
+                "        p {\n" +
+                "            font-size: 14px;\n" +
+                "            color: #555555;\n" +
+                "            line-height: 1.6;\n" +
+                "        }\n" +
+                "        a {\n" +
+                "            color: #007bff;\n" +
+                "            text-decoration: none;\n" +
+                "        }\n" +
+                "        .button {\n" +
+                "            display: inline-block;\n" +
+                "            padding: 10px 20px;\n" +
+                "            font-size: 14px;\n" +
+                "            font-weight: bold;\n" +
+                "            color: white;\n" +
+                "            background-color: #007bff;\n" +
+                "            text-decoration: none;\n" +
+                "            border-radius: 5px;\n" +
+                "            margin-top: 20px;\n" +
+                "        }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <h1>Leave Application Notification</h1>\n" +
+                "        <p>Dear Supervisor,</p>\n" +
+                "        <p>\n" +
+                "            <strong>"+employee.getFirstName() + " " + employee.getLastName()+"</strong> has applied for a leave. Please log in to the system to review the details.\n" +
+                "        </p>\n" +
+                "        <p>\n" +
+                "            Click the button below to view the application:\n" +
+                "        </p>\n" +
+                "        <a href=\"[youtube.com]\" class=\"button\">View Leave Application</a>\n" +
+                "        <p>\n" +
+                "            Thank you, <br>\n" +
+                "            HR Management System\n" +
+                "        </p>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>\n";
+        emailService.sendEmail(employee.getSupervisor().getEmail(), "Leave Application Submitted by "+ employee.getFirstName() + " " + employee.getLastName() ,htmlBody );
         return leaveRepository.save(newLeave);
 
     }
@@ -127,5 +188,6 @@ public class LeaveServiceImpl implements LeaveService {
     public List<Leave> getAllLeaves() {
         return leaveRepository.findAll();
     }
+
 }
 

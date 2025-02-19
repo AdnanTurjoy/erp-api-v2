@@ -23,7 +23,7 @@ public class LeaveController {
     private LeaveService leaveService;
 
     @PostMapping
-    public Leave applyLeave(@RequestBody ApplyLeaveDTO leave) {
+    public Leave applyLeave(@RequestBody ApplyLeaveDTO leave) throws MessagingException {
         return leaveService.applyLeave(leave);
     }
 
