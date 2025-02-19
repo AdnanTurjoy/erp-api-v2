@@ -45,5 +45,10 @@ public class Employee {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    // One-to-One relationship with Supervisor
+    @OneToOne
+    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
+    private Supervisor supervisor;
+
 }
 
